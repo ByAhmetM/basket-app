@@ -1,5 +1,5 @@
 import {
-  ActionIcon,
+  Badge,
   Container,
   Drawer,
   SimpleGrid,
@@ -24,6 +24,23 @@ function App() {
   let filteredItems = storeItems.filter(
     (item) => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) >= 0
   );
+  let addToBasket = ({ id, name }) => {
+    let basketIndex = basketItems.findIndex((item) => item.id === id);
+    if (basketIndex >= 0) {
+      let _basketItems = [...basketItems];
+      _basketItems[basketIndex].count += 1;
+      setBasketItems(_basketItems);
+    } else {
+      setBasketItems([
+        ...basketItems,
+        {
+          id,
+          name,
+          count: 1,
+        },
+      ]);
+    }
+  };
   return (
     <Container>
       <Group align="end">
@@ -43,21 +60,14 @@ function App() {
         </Indicator>
       </Group>
       <SimpleGrid cols={3} className="Store">
-        {filteredItems.map(({ name, price, src }, i) => {
+        {filteredItems.map(({ name, price, src, id }, i) => {
           return (
             <CardComponents
               key={i}
               name={name}
               price={price}
               src={src}
-              onAdd={() => {
-                setBasketItems([
-                  ...basketItems,
-                  {
-                    name,
-                  },
-                ]);
-              }}
+              onAdd={() => addToBasket({ id, name })}
             />
           );
         })}
@@ -84,8 +94,13 @@ function App() {
             </ThemeIcon>
           }
         >
-          {basketItems.map(({ name }, i) => (
-            <List.Item key={i}>{name}</List.Item>
+          {basketItems.map(({ name, count }, i) => (
+            <List.Item key={i}>
+              <Group>
+                {name}
+                <Badge>{count}</Badge>
+              </Group>
+            </List.Item>
           ))}
         </List>
       </Drawer>
