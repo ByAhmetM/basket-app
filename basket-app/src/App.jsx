@@ -3,23 +3,9 @@ import { IconCircleCheck, IconCircleDashed } from "@tabler/icons-react";
 import CardComponents from "./components/CardComponents";
 import { useState } from "react";
 import "./App.css";
+import storeItems from "./db";
 
 function App() {
-  const storeItems = [
-    {
-      name: "Çikolata Sosu",
-      price: 25,
-    },
-    {
-      name: "Basket Topu",
-      price: 20,
-    },
-    {
-      name: "Çikolata Kabı",
-      price: 10,
-    },
-  ];
-
   const [basketItems, setBasketItems] = useState([]);
   let [searchValue, setSearchValue] = useState("");
   let filteredItems = basketItems.filter(
@@ -28,12 +14,13 @@ function App() {
   return (
     <Container>
       <SimpleGrid cols={3} className="Store">
-        {storeItems.map(({ name, price }, i) => {
+        {storeItems.map(({ name, price, src }, i) => {
           return (
             <CardComponents
               key={i}
               name={name}
               price={price}
+              src={src}
               onAdd={() => {
                 setBasketItems([
                   ...basketItems,
