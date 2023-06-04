@@ -8,13 +8,20 @@ import storeItems from "./db";
 function App() {
   const [basketItems, setBasketItems] = useState([]);
   let [searchValue, setSearchValue] = useState("");
-  let filteredItems = basketItems.filter(
+  let filteredItems = storeItems.filter(
     (item) => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) >= 0
   );
   return (
     <Container>
+      <Input.Wrapper label="Arama ">
+        <Input
+          onChange={(e) => {
+            setSearchValue(e.target.value);
+          }}
+        />
+      </Input.Wrapper>
       <SimpleGrid cols={3} className="Store">
-        {storeItems.map(({ name, price, src }, i) => {
+        {filteredItems.map(({ name, price, src }, i) => {
           return (
             <CardComponents
               key={i}
@@ -33,13 +40,7 @@ function App() {
           );
         })}
       </SimpleGrid>
-      <Input.Wrapper label="Arama ">
-        <Input
-          onChange={(e) => {
-            setSearchValue(e.target.value);
-          }}
-        />
-      </Input.Wrapper>
+
       <List
         className="list"
         spacing="xs"
@@ -51,7 +52,7 @@ function App() {
           </ThemeIcon>
         }
       >
-        {filteredItems.map(({ name }, i) => (
+        {basketItems.map(({ name }, i) => (
           <List.Item key={i}>{name}</List.Item>
         ))}
       </List>
